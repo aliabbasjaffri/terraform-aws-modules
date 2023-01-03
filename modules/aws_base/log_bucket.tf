@@ -5,7 +5,7 @@ resource "random_id" "bucket_suffix" {
 # Changes based on the AWS terraform provider upgrade from 3.70.0 to 4.3.0
 
 resource "aws_s3_bucket" "log_bucket" {
-  bucket        = "opta-${var.env_name}-logging-bucket-${random_id.bucket_suffix.hex}"
+  bucket        = "${var.env_name}-logging-bucket-${random_id.bucket_suffix.hex}"
   force_destroy = true
 
   lifecycle {
@@ -35,7 +35,7 @@ resource "aws_s3_bucket_versioning" "log_bucket" {
   }
 }
 
-# Opta makes a design choice and uses public cloud provider managed encryption keys
+# we use public cloud provider managed encryption keys
 # They are very well administered by the cloud providers, and save the user from
 # a lot of key management overhead.
 #tfsec:ignore:aws-s3-encryption-customer-key

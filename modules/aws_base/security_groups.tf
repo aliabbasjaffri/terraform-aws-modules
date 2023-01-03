@@ -1,5 +1,5 @@
 resource "aws_security_group" "db" {
-  name        = "opta-${var.layer_name}-db-sg"
+  name        = "${var.layer_name}-db-sg"
   description = "For usage by databases to give access to resources in the vpc"
   vpc_id      = local.vpc_id
 
@@ -21,7 +21,7 @@ resource "aws_security_group" "db" {
 }
 
 resource "aws_security_group" "elasticache" {
-  name        = "opta-${var.layer_name}-elasticache-sg"
+  name        = "${var.layer_name}-elasticache-sg"
   description = "For usage by elasticache to give access to resources in the vpc"
   vpc_id      = local.vpc_id
 
@@ -37,7 +37,7 @@ resource "aws_security_group" "elasticache" {
 }
 
 resource "aws_security_group" "documentdb" {
-  name        = "opta-${var.layer_name}-documentdb-sg"
+  name        = "${var.layer_name}-documentdb-sg"
   description = "For usage by documentdb to give access to resources in the vpc"
   vpc_id      = local.vpc_id
 

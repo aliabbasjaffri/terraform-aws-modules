@@ -6,11 +6,11 @@ resource "aws_subnet" "public_subnets" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name                                           = "opta-${var.layer_name}-public-${data.aws_availability_zones.current.zone_ids[count.index]}"
-    "kubernetes.io/cluster/opta-${var.layer_name}" = "shared"
-    type                                           = "public"
-    terraform                                      = "true"
-    "kubernetes.io/role/elb"                       = "1"
+    Name                                      = "${var.layer_name}-public-${data.aws_availability_zones.current.zone_ids[count.index]}"
+    "kubernetes.io/cluster/${var.layer_name}" = "shared"
+    type                                      = "public"
+    terraform                                 = "true"
+    "kubernetes.io/role/elb"                  = "1"
   }
 }
 
@@ -18,7 +18,7 @@ resource "aws_route_table" "public_route_table" {
   count  = local.create_vpc ? 1 : 0
   vpc_id = local.vpc_id
   tags = {
-    Name      = "opta-${var.layer_name}-public"
+    Name      = "${var.layer_name}-public"
     terraform = "true"
   }
 }
@@ -29,7 +29,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = local.vpc_id
 
   tags = {
-    Name      = "opta-${var.layer_name}-internet-gateway"
+    Name      = "${var.layer_name}-internet-gateway"
     terraform = "true"
   }
 }

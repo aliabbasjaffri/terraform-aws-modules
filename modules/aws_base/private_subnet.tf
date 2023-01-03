@@ -5,11 +5,11 @@ resource "aws_subnet" "private_subnets" {
   vpc_id               = local.vpc_id
 
   tags = {
-    Name                                           = "opta-${var.layer_name}-private-${data.aws_availability_zones.current.zone_ids[count.index]}"
-    "kubernetes.io/cluster/opta-${var.layer_name}" = "shared"
-    type                                           = "private"
-    terraform                                      = "true"
-    "kubernetes.io/role/internal-elb"              = "1"
+    Name                                      = "${var.layer_name}-private-${data.aws_availability_zones.current.zone_ids[count.index]}"
+    "kubernetes.io/cluster/${var.layer_name}" = "shared"
+    type                                      = "private"
+    terraform                                 = "true"
+    "kubernetes.io/role/internal-elb"         = "1"
   }
 }
 
@@ -17,7 +17,7 @@ resource "aws_route_table" "private_route_tables" {
   count  = local.create_vpc ? length(var.private_ipv4_cidr_blocks) : 0
   vpc_id = local.vpc_id
   tags = {
-    Name      = "opta-${var.layer_name}-private-${data.aws_availability_zones.current.zone_ids[count.index]}"
+    Name      = "${var.layer_name}-private-${data.aws_availability_zones.current.zone_ids[count.index]}"
     terraform = "true"
   }
 }
@@ -32,7 +32,7 @@ resource "aws_eip" "nat_eips" {
   count = local.create_vpc ? length(var.private_ipv4_cidr_blocks) : 0
   vpc   = true
   tags = {
-    Name      = "opta-${var.layer_name}-nat-ip-${data.aws_availability_zones.current.zone_ids[count.index]}"
+    Name      = "${var.layer_name}-nat-ip-${data.aws_availability_zones.current.zone_ids[count.index]}"
     terraform = "true"
   }
 }
@@ -42,7 +42,7 @@ resource "aws_nat_gateway" "nat_gateways" {
   allocation_id = aws_eip.nat_eips[count.index].id
   subnet_id     = aws_subnet.public_subnets[count.index].id
   tags = {
-    Name      = "opta-${var.layer_name}-${data.aws_availability_zones.current.zone_ids[count.index]}"
+    Name      = "${var.layer_name}-${data.aws_availability_zones.current.zone_ids[count.index]}"
     terraform = "true"
   }
 }
