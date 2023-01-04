@@ -114,12 +114,12 @@ resource "aws_kms_key" "key" {
   policy              = data.aws_iam_policy_document.kms_policy.json
   enable_key_rotation = true
   tags = {
-    Name      = "${var.layer_name}"
+    Name      = "${var.module_prefix}-${var.layer_name}"
     terraform = "true"
   }
 }
 
 resource "aws_kms_alias" "alias" {
-  name          = "alias/${var.layer_name}"
+  name          = "alias/${var.module_prefix}-${var.layer_name}"
   target_key_id = aws_kms_key.key.key_id
 }

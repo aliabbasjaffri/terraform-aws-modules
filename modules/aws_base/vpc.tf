@@ -4,7 +4,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = true
   enable_dns_support   = true
   tags = {
-    Name      = "${var.layer_name}"
+    Name      = "${var.module_prefix}-${var.layer_name}"
     terraform = "true"
   }
 }
@@ -29,7 +29,7 @@ resource "random_id" "vpc_flow_log_suffix" {
 
 resource "aws_cloudwatch_log_group" "vpc_flow_log" {
   count             = local.create_vpc ? 1 : 0
-  name              = "${var.env_name}-vpc-flow-${random_id.vpc_flow_log_suffix[0].hex}"
+  name              = "${var.module_prefix}-${var.env_name}-vpc-flow-${random_id.vpc_flow_log_suffix[0].hex}"
   kms_key_id        = aws_kms_key.key.arn
   retention_in_days = var.vpc_log_retention
   lifecycle { ignore_changes = [name] }
@@ -37,7 +37,7 @@ resource "aws_cloudwatch_log_group" "vpc_flow_log" {
 
 resource "aws_iam_role" "vpc_flow_log" {
   count = local.create_vpc ? 1 : 0
-  name  = "${var.env_name}-vpc-flow"
+  name  = "${var.module_prefix}-${var.env_name}-vpc-flow"
 
   assume_role_policy = <<EOF
 {
@@ -58,7 +58,7 @@ EOF
 
 resource "aws_iam_role_policy" "vpc_flow_log" {
   count = local.create_vpc ? 1 : 0
-  name  = "${var.env_name}-vpc-flow"
+  name  = "${var.module_prefix}-${var.env_name}-vpc-flow"
   role  = aws_iam_role.vpc_flow_log[0].id
   #Ignore 
   #tfsec:ignore:aws-iam-no-policy-wildcards

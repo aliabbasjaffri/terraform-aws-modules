@@ -49,19 +49,26 @@ variable "public_ipv4_cidr_blocks" {
 }
 
 variable "vpc_id" {
-  description = "The ID of an pre-existing VPC to use instead of creating a new VPC"
+  description = "The ID of an pre-existing VPC to use instead of creating a new VPC for opta"
   type        = string
   default     = null
 }
 
 variable "public_subnet_ids" {
-  description = "List of pre-existing public subnets to use instead of creating new subnets. Required when var.vpc_id is set."
+  description = "List of pre-existing public subnets to use instead of creating new subnets for opta. Required when var.vpc_id is set."
   type        = list(string)
   default     = null
 }
 
 variable "private_subnet_ids" {
-  description = "List of pre-existing private subnets to use instead of creating new subnets. Required when var.vpc_id is set."
+  description = "List of pre-existing private subnets to use instead of creating new subnets for opta. Required when var.vpc_id is set."
   type        = list(string)
   default     = null
 }
+
+variable "module_prefix" {
+  description = "Module prefix to add for all resources"
+  type        = string
+  default     = "opta"
+}
+
