@@ -1,10 +1,10 @@
 resource "aws_security_group" "eks" {
-  name_prefix = "opta-${var.layer_name}"
+  name_prefix = "${var.module_prefix}-${var.layer_name}"
   description = "EKS cluster security group."
   vpc_id      = var.vpc_id
 
   tags = {
-    "Name" = "opta-${var.layer_name}-eks_cluster_sg"
+    "Name" = "${var.module_prefix}-${var.layer_name}-eks_cluster_sg"
   }
 
   ingress {
@@ -77,7 +77,7 @@ resource "aws_security_group_rule" "control_plane_access" {
 }
 
 resource "aws_cloudwatch_log_group" "cluster_logs" {
-  name              = "/aws/eks/opta-${var.layer_name}/cluster"
+  name              = "/aws/eks/${var.module_prefix}-${var.layer_name}/cluster"
   kms_key_id        = data.aws_kms_key.env_key.arn
   retention_in_days = var.eks_log_retention
   tags = {

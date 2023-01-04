@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "node_group" {
 }
 
 resource "aws_iam_role" "node_group" {
-  name = "opta-${var.layer_name}-eks-default-node-group"
+  name = "${var.module_prefix}-${var.layer_name}-eks-default-node-group"
 
   assume_role_policy = data.aws_iam_policy_document.node_group.json
   tags = {
@@ -48,7 +48,7 @@ resource "random_id" "key_suffix" {
 resource "aws_launch_template" "eks_node" {
   count         = (length(var.node_launch_template) > 0) ? 1 : 0
   instance_type = var.node_instance_type
-  name_prefix   = "opta-${var.layer_name}"
+  name_prefix   = "${var.module_prefix}-${var.layer_name}"
   # https://github.com/hashicorp/terraform-provider-aws/issues/15118
 
   block_device_mappings {
@@ -65,7 +65,7 @@ resource "aws_launch_template" "eks_node" {
 
 resource "aws_eks_node_group" "node_group" {
   cluster_name    = aws_eks_cluster.cluster.name
-  node_group_name = "opta-${var.layer_name}-default-${random_id.key_suffix.hex}"
+  node_group_name = "${var.module_prefix}-${var.layer_name}-default-${random_id.key_suffix.hex}"
   node_role_arn   = aws_iam_role.node_group.arn
   subnet_ids      = aws_eks_cluster.cluster.vpc_config[0].subnet_ids
   capacity_type   = var.spot_instances ? "SPOT" : "ON_DEMAND"
@@ -75,7 +75,7 @@ resource "aws_eks_node_group" "node_group" {
 
   disk_size      = (length(var.node_launch_template) > 0) ? null : var.node_disk_size
   instance_types = (length(var.node_launch_template) > 0) ? [] : [var.node_instance_type]
-  labels         = { node_group_name = "opta-${var.layer_name}-default" }
+  labels         = { node_group_name = "${var.module_prefix}-${var.layer_name}-default" }
 
   scaling_config {
     max_size     = var.max_nodes

@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "trust_policy" {
 }
 
 resource "aws_iam_role" "cluster_role" {
-  name               = "opta-${var.layer_name}-eks-cluster-role"
+  name               = "${var.module_prefix}-${var.layer_name}-eks-cluster-role"
   assume_role_policy = data.aws_iam_policy_document.trust_policy.json
   tags = {
     terraform = "true"
@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "minimal_ebs_kms_create_and_attach" {
 }
 
 resource "aws_iam_policy" "minimal_ebs_kms_create_and_attach" {
-  name = "opta-${var.layer_name}-ebs-kms-create-attach"
+  name = "${var.module_prefix}-${var.layer_name}-ebs-kms-create-attach"
 
   policy = data.aws_iam_policy_document.minimal_ebs_kms_create_and_attach.json
 }

@@ -89,3 +89,9 @@ variable "ami_type" {
   type    = string
   default = "AL2_x86_64"
 }
+
+variable "module_prefix" {
+  description = "Module prefix to add for all resources"
+  type        = string
+  default     = "opta"
+}
