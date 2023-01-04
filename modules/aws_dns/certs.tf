@@ -6,7 +6,7 @@ resource "aws_acm_certificate" "certificate" {
   subject_alternative_names = ["*.${aws_route53_zone.public.name}"]
   validation_method         = "DNS"
   tags = {
-    Name = "${var.env_name}"
+    Name = "${var.module_prefix}-${var.env_name}"
   }
 }
 
@@ -38,6 +38,6 @@ resource "aws_acm_certificate" "imported_certificate" {
   certificate_body  = data.aws_ssm_parameter.certificate_body[0].value
   certificate_chain = var.cert_chain_included ? data.aws_ssm_parameter.certificate_chain[0].value : null
   tags = {
-    Name = "${var.env_name}"
+    Name = "${var.module_prefix}-${var.env_name}"
   }
 }

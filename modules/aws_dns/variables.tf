@@ -46,20 +46,26 @@ variable "linked_module" {
   type = string
 }
 
+variable "module_prefix" {
+  description = "Module prefix to add for all resources"
+  type        = string
+  default     = "opta"
+}
+
 data "aws_ssm_parameter" "private_key" {
   count           = var.upload_cert ? 1 : 0
-  name            = "/${var.env_name}/dns-private-key.pem"
+  name            = "/${var.module_prefix}-${var.env_name}/dns-private-key.pem"
   with_decryption = true
 }
 
 data "aws_ssm_parameter" "certificate_body" {
   count           = var.upload_cert ? 1 : 0
-  name            = "/${var.env_name}/dns-certificate-body.pem"
+  name            = "/${var.module_prefix}-${var.env_name}/dns-certificate-body.pem"
   with_decryption = true
 }
 
 data "aws_ssm_parameter" "certificate_chain" {
   count           = var.cert_chain_included ? 1 : 0
-  name            = "/${var.env_name}/dns-certificate-chain.pem"
+  name            = "/${var.module_prefix}-${var.env_name}/dns-certificate-chain.pem"
   with_decryption = true
 }
